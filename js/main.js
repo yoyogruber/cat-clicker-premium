@@ -21,7 +21,7 @@ Cat.prototype.addClick = function() {
 ///////////////////////////////// First Cat ///////////////////////////////////////////////////////||||
 
 $("#cat1").click(function() {
-  var cat1 = new Cat("Lizzy",
+  var cat1 = new Cat("Mini",
     "https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426"
   );
 
@@ -52,7 +52,7 @@ $("#cat1").click(function() {
 
 $("#cat2").click(function() {
   var cat2 = new Cat(
-    "Jeffery",
+    "Micki",
     "https://hdwallpaperdaily.com/wp-content/uploads/2013/09/snowy-cat-hd-wallpaper-1280x1024.jpg"
   );
   
@@ -108,7 +108,7 @@ $("#cat3").click(function() {
 
 $("#cat4").click(function() {
   var cat4 = new Cat(
-    "Lazy Cat",
+    "entspannte Katze",
     "http://1.bp.blogspot.com/-0qbVQct5v2k/UF8ytUujtrI/AAAAAAAADZo/J-Q7A-BqgQk/s1600/1305842915-cute-cats-animals-kittens-wallpaper.jpeg"
   );
 
