@@ -1,159 +1,154 @@
-// global variables for DOM manipulation
-var catsName = document.getElementById("catName");
-var catsImage = document.getElementById("catImg");
-var clicksText = document.getElementById("clickText");
-var clicksNum = document.getElementById("clickNum");
- 
 
-//Object Constructor
-function Cat(name, image) {
-  this.name = name;
-  this.image = image;
-  this.numOfClicks = 0;
-}
+/* ======= Model ======= */
 
-// Method added to object prototype
-Cat.prototype.addClick = function() {
-  this.numOfClicks++;
+var model = {
+    currentCat: null,
+    cats: [
+        {
+            clickCount : 0,
+            name : 'Tabby',
+            imgSrc : 'pic/cat1.jpg',
+            imgAttribution : 'https://www.flickr.com/photos/bigtallguy/434164568'
+        },
+        {
+            clickCount : 0,
+            name : 'Tiger',
+            imgSrc : 'pic/cat2.jpg',
+            imgAttribution : 'https://www.flickr.com/photos/xshamx/4154543904'
+        },
+        {
+            clickCount : 0,
+            name : 'Scaredy',
+            imgSrc : 'img/22252709_010df3379e_z.jpg',
+            imgAttribution : 'https://www.flickr.com/photos/kpjas/22252709'
+        },
+        {
+            clickCount : 0,
+            name : 'Shadow',
+            imgSrc : 'img/1413379559_412a540d29_z.jpg',
+            imgAttribution : 'https://www.flickr.com/photos/malfet/1413379559'
+        },
+        {
+            clickCount : 0,
+            name : 'Sleepy',
+            imgSrc : 'img/9648464288_2516b35537_z.jpg',
+            imgAttribution : 'https://www.flickr.com/photos/onesharp/9648464288'
+        }
+    ]
+};
+
+/* ======= Octopus ======= */
+
+var octopus = {
+
+    init: function() {
+        // set our current cat to the first one in the list
+        model.currentCat = model.cats[0];
+
+        // tell our views to initialize
+        catListView.init();
+        catView.init();
+    },
+
+    getCurrentCat: function() {
+        return model.currentCat;
+    },
+
+    getCats: function() {
+        return model.cats;
+    },
+
+    // set the currently-selected cat to the object passed in
+    setCurrentCat: function(cat) {
+        model.currentCat = cat;
+    },
+
+    // increments the counter for the currently-selected cat
+    incrementCounter: function() {
+        model.currentCat.clickCount++;
+        catView.render();
+    }
 };
 
 
-///////////////////////////////// First Cat ///////////////////////////////////////////////////////||||
+//view
+var catView = {
 
-$("#cat1").click(function() {
-  var cat1 = new Cat("Mini",
-    "https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426"
-  );
+    init: function() {
+        // store pointers to our DOM elements for easy access later
+        this.catElem = document.getElementById('cat');
+        this.catNameElem = document.getElementById('cat-name');
+        this.catImageElem = document.getElementById('cat-img');
+        this.countElem = document.getElementById('cat-count');
 
-  clicksNum.innerHTML = cat1.numOfClicks;
-  
-  var clicker = document.getElementById("catImg");
+        // on click, increment the current cat's counter
+        this.catImageElem.addEventListener('click', function(){
+            octopus.incrementCounter();
+        });
 
-  $("#placeHolderText").css("display", "none");
-  $("#clicks-section").addClass("well");
-  $("#catName").addClass("well");
-  
-  catsName.innerHTML = cat1.name;
-  catsImage.src = cat1.image;
-  clicksText.innerHTML = "Clicks:";
- clicksNum.innerHTML = 0;
-  
-  clicker.onclick = function() {
-  cat1.addClick();
-  clicksNum.innerHTML = cat1.numOfClicks;
+        // render this view (update the DOM elements with the right values)
+        this.render();
+    },
 
-}
-
-
-});
+    render: function() {
+        // update the DOM elements with values from the current cat
+        var currentCat = octopus.getCurrentCat();
+        this.countElem.textContent = currentCat.clickCount;
+        this.catNameElem.textContent = currentCat.name;
+        this.catImageElem.src = currentCat.imgSrc;
+    }
+};
 
 
-///////////////////////////////// Second Cat ///////////////////////////////////////////////////////||||
+var catListView = {
 
-$("#cat2").click(function() {
-  var cat2 = new Cat(
-    "Micki",
-    "https://hdwallpaperdaily.com/wp-content/uploads/2013/09/snowy-cat-hd-wallpaper-1280x1024.jpg"
-  );
-  
+    init: function() {
+        // store the DOM element for easy access later
+        this.catListElem = document.getElementById('cat-list');
 
-  //console.log(cat2.name);
+        // render this view (update the DOM elements with the right values)
+        this.render();
+    },
 
-  var clicker = document.getElementById("catImg");
+    render: function() {
+        var cat, elem, i;
+        // get the cats we'll be rendering from the octopus
+        var cats = octopus.getCats();
 
-  $("#placeHolderText").css("display", "none");
-  $("#clicks-section").addClass("well");
-  $("#catName").addClass("well");
-  
-  catsName.innerHTML = cat2.name;
-  catsImage.src = cat2.image;
-  clicksText.innerHTML = "Clicks:";
-  //clicksNum.innerHTML = numOfClicks;
-  clicksNum.innerHTML = 0;
-  
-  clicker.onclick = function() {
-  cat2.addClick();
-  clicksNum.innerHTML = cat2.numOfClicks;
-}
+        // empty the cat list
+        this.catListElem.innerHTML = '';
 
-});
+        // loop over the cats
+        for (i = 0; i < cats.length; i++) {
+            // this is the cat we're currently looping over
+            cat = cats[i];
 
-///////////////////////////////// Third Cat ///////////////////////////////////////////////////////||||
+            // make a new cat list item and set its text
+            elem = document.createElement('li');
+            elem.textContent = cat.name;
 
-$("#cat3").click(function() {
-  var cat3 = new Cat(
-    "Synthia",
-    "https://pbs.twimg.com/media/DSAS1uAWkAENbFI.jpg"
-  );
+            // on click, setCurrentCat and render the catView
+            // (this uses our closure-in-a-loop trick to connect the value
+            //  of the cat variable to the click event function)
+            elem.addEventListener('click', (function(catCopy) {
+                return function() {
+                    octopus.setCurrentCat(catCopy);
+                    catView.render();
+                };
+            })(cat));
 
-    var clicker = document.getElementById("catImg");
+            // finally, add the element to the list
+            this.catListElem.appendChild(elem);
+        }
+    }
+};
 
-  $("#placeHolderText").css("display", "none");
-  $("#clicks-section").addClass("well");
-  $("#catName").addClass("well");
-  
-  catsName.innerHTML = cat3.name;
-  catsImage.src = cat3.image;
-  clicksText.innerHTML = "Clicks:";
-  clicksNum.innerHTML = 0;
-  
-  clicker.onclick = function() {
-  cat3.addClick();
-  clicksNum.innerHTML = cat3.numOfClicks;
-}
-  
-});
+// make it go!
+octopus.init();
 
-///////////////////////////////// Fourth Cat ///////////////////////////////////////////////////////||||
 
-$("#cat4").click(function() {
-  var cat4 = new Cat(
-    "entspannte Katze",
-    "http://1.bp.blogspot.com/-0qbVQct5v2k/UF8ytUujtrI/AAAAAAAADZo/J-Q7A-BqgQk/s1600/1305842915-cute-cats-animals-kittens-wallpaper.jpeg"
-  );
 
-  var clicker = document.getElementById("catImg");
 
-  $("#placeHolderText").css("display", "none");
-  $("#clicks-section").addClass("well");
-  $("#catName").addClass("well");
-  
-  catsName.innerHTML = cat4.name;
-  catsImage.src = cat4.image;
-  clicksText.innerHTML = "Clicks:";
-  clicksNum.innerHTML = 0;
-  
-  clicker.onclick = function() {
-  cat4.addClick();
-  clicksNum.innerHTML = cat4.numOfClicks;
-}
-  
-});
 
-///////////////////////////////// Fifth Cat ///////////////////////////////////////////////////////||||
 
-$("#cat5").click(function() {
-  var cat5 = new Cat(
-    "Garfield",
-    "http://fr.web.img6.acsta.net/r_1280_720/medias/nmedia/18/35/23/61/18382564.jpg"
-  );
-
-  var clicker = document.getElementById("catImg");
-
-  $("#placeHolderText").css("display", "none");
-  $("#clicks-section").addClass("well");
-  $("#catName").addClass("well");
-  
-  catsName.innerHTML = cat5.name;
-  catsImage.src = cat5.image;
-  clicksText.innerHTML = "Clicks:";
-  clicksNum.innerHTML = 0;
-  
-  clicker.onclick = function() {
-  cat5.addClick();
-  clicksNum.innerHTML = cat5.numOfClicks;
-}
-   
-  
-});
 
