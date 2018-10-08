@@ -85,6 +85,7 @@ var octopus = {
 
         adminCancel: function() {
             adminView.hide();
+            model.adminShow = false;
         },
 
         adminSave: function() {
@@ -95,6 +96,7 @@ var octopus = {
             catView.render();
             catListView.render();
             adminView.hide();
+            model.adminShow = false;
         }
 };
 
