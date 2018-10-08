@@ -77,3 +77,12 @@ a {
   padding-top: 15%;
   font-size: 20px;
 }
+
+button{
+    background-color: #006666;
+    color: #ffffff !important;
+    border-radius: 10px;
+    border: none;
+    font-size: 20px;
+    padding: 7px;
+}

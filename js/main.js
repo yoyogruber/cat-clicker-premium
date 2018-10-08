@@ -3,6 +3,7 @@
 
 var model = {
     currentCat: null,
+    adminShow: false,
     cats: [
         {
             clickCount : 0,
@@ -48,6 +49,8 @@ var octopus = {
         // tell our views to initialize
         catListView.init();
         catView.init();
+        adminView.init();
+        adminView.hide();
     },
 
     getCurrentCat: function() {
@@ -67,7 +70,32 @@ var octopus = {
     incrementCounter: function() {
         model.currentCat.clickCount++;
         catView.render();
-    }
+    },
+// function runs when 'Admin' button is clicked.
+        adminDisplay: function() {
+            if (model.adminShow === false) {
+                model.adminShow = true;
+                adminView.show(); //show the admin form
+            }
+            else if (model.Show === true) {
+                model.adminShow = false;
+                adminView.hide(); // hide the form
+            }
+        },
+
+        adminCancel: function() {
+            adminView.hide();
+        },
+
+        adminSave: function() {
+            // saves the new cat data and hides the form
+            model.currentCat.name = adminCatName.value;
+            model.currentCat.imgSrc = adminCatURL.value;
+            model.currentCat.clickCount = adminCatClicks.value;
+            catView.render();
+            catListView.render();
+            adminView.hide();
+        }
 };
 
 
@@ -140,8 +168,55 @@ var catListView = {
             // finally, add the element to the list
             this.catListElem.appendChild(elem);
         }
-    }
+    },
+
 };
+
+var adminView = {
+    init: function() {
+        this.adminCatName = document.getElementById("adminCatName");
+        this.adminCatURL = document.getElementById('adminCatURL');
+        this.adminCatClicks = document.getElementById('adminCatClicks');
+
+        var admin = document.getElementById('admin');
+
+        this.adminBtn = document.getElementById('adminBtn');
+        this.adminCancel = document.getElementById('adminCancel');
+        this.adminSave  = document.getElementById('adminSave');
+
+        this.adminBtn.addEventListener('click', function(){
+            //show the admin form
+            octopus.adminDisplay();
+        });
+        this.adminCancel.addEventListener('click', function(){
+            //cancel the form
+            octopus.adminCancel();
+        });
+
+        this.adminSave.addEventListener('click', function(){
+            //save the form
+            octopus.adminSave();
+        });
+
+        this.render();
+    },
+
+    render: function() {
+        var currentCat = octopus.getCurrentCat(); //calls the current cat
+        this.adminCatName.value = currentCat.name;
+        this.adminCatURL.value = currentCat.imgSrc;
+        this.adminCatClicks.value = currentCat.clickCount;
+    },    
+    show: function() {
+        admin.style.display ='block'; //shows the admin div
+    },
+
+    hide: function(){
+        admin.style.display = 'none'; // hide the admin div
+    }
+
+};
+
 
 // make it go!
 octopus.init();
